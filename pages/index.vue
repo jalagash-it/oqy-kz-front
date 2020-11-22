@@ -3,7 +3,7 @@
     <div>
       <Logo />
       <h1 class="title">
-        oqykz-front
+        oqy.kz-front
       </h1>
       <div class="links">
         <a

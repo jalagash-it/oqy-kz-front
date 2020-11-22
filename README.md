@@ -1,4 +1,4 @@
-# oqykz-front
+# oqy.kz-front
 
 ## Build Setup
 
