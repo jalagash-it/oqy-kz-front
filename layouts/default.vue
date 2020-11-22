@@ -41,8 +41,11 @@
             <template #button-content>
               <em>Қонақ</em>
             </template>
-            <b-dropdown-item href="#">Кіру</b-dropdown-item>
-            <b-dropdown-item href="#">Тіркелу</b-dropdown-item>
+            <b-dropdown-item to="/auth/login">Кіру</b-dropdown-item>
+            <b-dropdown-item to="/auth/register">Тіркелу</b-dropdown-item>
+            <b-dropdown-item to="/auth/reset">
+              Құпиясөзді жаңарту
+            </b-dropdown-item>
           </b-nav-item-dropdown>
         </b-navbar-nav>
       </b-collapse>
