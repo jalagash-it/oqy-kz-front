@@ -1,7 +1,15 @@
+// import path from 'path'
+// import fs from 'fs'
+
 export default {
     // Disable server-side rendering (https://go.nuxtjs.dev/ssr-mode)
     ssr: false,
-
+    // server: {
+    //     https: {
+    //         key: fs.readFileSync(path.resolve(__dirname, 'server.key')),
+    //         cert: fs.readFileSync(path.resolve(__dirname, 'server.crt'))
+    //     }
+    // },
     // Global page headers (https://go.nuxtjs.dev/config-head)
     head: {
         title: 'oqy.kz-front',
@@ -21,7 +29,10 @@ export default {
     ],
 
     // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
-    plugins: [],
+    plugins: [
+        '~/plugins/axios',
+        '~/plugins/getCurrentUser',
+    ],
 
     // Auto import components (https://go.nuxtjs.dev/config-components)
     components: true,
@@ -35,13 +46,25 @@ export default {
         'bootstrap-vue/nuxt',
         // https://go.nuxtjs.dev/axios
         '@nuxtjs/axios',
+        '@nuxtjs/proxy',
         // https://go.nuxtjs.dev/pwa
         '@nuxtjs/pwa',
     ],
 
     // Axios module configuration (https://go.nuxtjs.dev/config-axios)
-    axios: {},
+    axios: {
+        proxy: true,
+        requestInterceptor: (config, { store }) => {
+            config.headers.common['Content-Type'] = 'application/json';
 
+            return config
+        },
+        responseInterceptor: (res, ctx) => {}
+    },
+
+    proxy: {
+        '/api': { target: 'http://localhost:8000/', changeOrigin: true },
+    },
     // Build Configuration (https://go.nuxtjs.dev/config-build)
     build: {}
 }

@@ -1,14 +1,15 @@
 <template>
   <div>
-    <b-navbar toggleable="lg" type="dark" variant="info">
-      <b-navbar-brand href="#">ОҚЫ</b-navbar-brand>
+    <b-navbar toggleable="lg" type="light" variant="light">
+      <b-navbar-brand to="/">ОҚЫ</b-navbar-brand>
 
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav>
-          <b-nav-item href="#">Жоба жайлы</b-nav-item>
-          <b-nav-item href="#">Ашық аферта</b-nav-item>
+          <b-nav-item to="/project/about">Жоба жайлы</b-nav-item>
+          <b-nav-item to="/courses/html-css" class="html-course-nav-item">html, css негіздері</b-nav-item>
+          <b-nav-item to="/project/public-offer" v-if="false">Ашық оферта</b-nav-item>
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->
@@ -19,7 +20,7 @@
               class="mr-sm-2"
               placeholder="Іздеу"
             ></b-form-input>
-            <b-button size="sm" class="my-2 my-sm-0" type="submit"
+            <b-button size="sm" class="my-2 my-sm-0" type="button"
               >Іздеу</b-button
             >
           </b-nav-form>
@@ -31,10 +32,10 @@
           <b-nav-item-dropdown right v-if="user != null">
             <!-- Using 'button-content' slot -->
             <template #button-content>
-              <em>User</em>
+              <em>{{ user.username }}</em>
             </template>
             <b-dropdown-item href="#">Профиль</b-dropdown-item>
-            <b-dropdown-item href="#">Шығу</b-dropdown-item>
+            <b-dropdown-item @click="logout">Шығу</b-dropdown-item>
           </b-nav-item-dropdown>
           <b-nav-item-dropdown right v-else>
             <!-- Using 'button-content' slot -->
@@ -57,57 +58,19 @@
 export default {
   data() {
     return {
-      user: null,
-    };
+      user:null
+    }
+  },
+  asyncData({ $axios }) {
+    $axios.$get("/").then((res) => {
+      console.log(res);
+    });
   },
 };
 </script>
-<style>
-html {
-  font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI",
-    Roboto, "Helvetica Neue", Arial, sans-serif;
-  font-size: 16px;
-  word-spacing: 1px;
-  -ms-text-size-adjust: 100%;
-  -webkit-text-size-adjust: 100%;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
-  box-sizing: border-box;
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-}
-
-.button--green {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #3b8070;
-  color: #3b8070;
-  text-decoration: none;
-  padding: 10px 30px;
-}
-
-.button--green:hover {
-  color: #fff;
-  background-color: #3b8070;
-}
-
-.button--grey {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #35495e;
-  color: #35495e;
-  text-decoration: none;
-  padding: 10px 30px;
-  margin-left: 15px;
-}
-
-.button--grey:hover {
-  color: #fff;
-  background-color: #35495e;
-}
+<style scoped>
+  .html-course-nav-item{
+    border: 1px solid rgb(60, 159, 184);
+    border-radius: 5px;
+  }
 </style>

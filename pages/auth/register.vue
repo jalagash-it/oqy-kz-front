@@ -4,40 +4,92 @@
       <!-- Tabs Titles -->
       <h2>Тіркелу</h2>
       <!-- Login Form -->
-      <form>
-        <input
+      <b-form @submit="registerSubmit">
+        <b-form-input
           type="text"
-          id="login"
+          class="fadeIn second"
+          name="login"
+          placeholder="логин"
+          v-model="user.username"
+        />
+        <b-form-input
+          type="email"
           class="fadeIn second"
           name="login"
           placeholder="email"
+          v-model="user.email"
         />
-        <input
-          type="text"
-          id="password"
+        <b-form-input
+          type="password"
           class="fadeIn third"
-          name="login"
           placeholder="құпиясөз"
+          v-model="user.password1"
         />
-        <input
-          type="text"
+        <b-form-input
+          type="password"
           id="confirm"
           class="fadeIn fourth"
           name="login"
           placeholder="қайталаңыз"
+          v-model="user.password2"
         />
-        <input type="submit" class="fadeIn fourth" value="Тіркелу" />
-      </form>
+        <b-button type="submit" class="fadeIn fourth">Тіркелу</b-button>
+      </b-form>
 
       <!-- Remind Passowrd -->
-      <div id="formFooter">
-        <a class="underlineHover" to="/auth/login">
-          Бұрыннан аккаунтыңыз бар ма?
-        </a>
+      <div class="formFooter">
+        <NuxtLink class="underlineHover" to="/auth/reset">
+          Құпиясөзіңізді ұмыттыңыз ба?
+        </NuxtLink>
+        <br />
+        <NuxtLink class="underlineHover" to="/auth/login">
+          Жүйеге кіру
+        </NuxtLink>
       </div>
     </div>
   </div>
 </template>
+<script>
+import { mapActions, mapState } from "vuex";
+export default {
+  layout: "empty",
+  data() {
+    return {
+      user: {
+        username: "",
+        email: "",
+        password1: "",
+        password2: "",
+      },
+    };
+  },
+  computed: {
+    ...mapState("auth", { user: (state) => state.user }),
+  },
+  methods: {
+    ...mapActions("auth", ["register"]),
+    registerSubmit(evt) {
+      evt.preventDefault();
+      this.register(this.user)
+        .then((res) => {
+          this.$bvToast.toast("Керемет", {
+            title: "Тіркеуден өттіңіз",
+            solid: true,
+            variant: "success",
+          });
+        })
+        .catch((err) => {
+          this.$bvToast.toast("Қате", {
+            title: "Тіркеле алмадыңыз",
+            solid: true,
+            variant: "danger",
+          });
+          console.error(err);
+        });
+    },
+  },
+};
+</script>
 <style scoped>
 html {
   background-color: #56baed;
@@ -93,7 +145,7 @@ h2 {
   text-align: center;
 }
 
-#formFooter {
+.formFooter {
   background-color: #f6f6f6;
   border-top: 1px solid #dce8f1;
   padding: 25px;
@@ -117,6 +169,7 @@ h2.active {
 
 input[type="button"],
 input[type="submit"],
+button[type="submit"],
 input[type="reset"] {
   background-color: #56baed;
   border: none;
@@ -141,12 +194,14 @@ input[type="reset"] {
 
 input[type="button"]:hover,
 input[type="submit"]:hover,
+button[type="submit"]:hover,
 input[type="reset"]:hover {
   background-color: #39ace7;
 }
 
 input[type="button"]:active,
 input[type="submit"]:active,
+button[type="submit"]:active,
 input[type="reset"]:active {
   -moz-transform: scale(0.95);
   -webkit-transform: scale(0.95);
@@ -155,7 +210,9 @@ input[type="reset"]:active {
   transform: scale(0.95);
 }
 
-input[type="text"] {
+input[type="text"],
+input[type="email"],
+input[type="password"] {
   background-color: #f6f6f6;
   border: none;
   color: #0d0d0d;
@@ -176,12 +233,16 @@ input[type="text"] {
   border-radius: 5px 5px 5px 5px;
 }
 
-input[type="text"]:focus {
+input[type="text"],
+input[type="email"],
+input[type="password"]:focus {
   background-color: #fff;
   border-bottom: 2px solid #5fbae9;
 }
 
-input[type="text"]:placeholder {
+input[type="text"],
+input[type="email"],
+input[type="password"]:placeholder {
   color: #cccccc;
 }
 

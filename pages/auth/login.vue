@@ -3,32 +3,74 @@
     <div id="formContent">
       <!-- Tabs Titles -->
       <h2>Жүйеге кіру</h2>
+
       <!-- Login Form -->
-      <form>
+      <form @submit="callLogin">
         <input
           type="text"
           id="login"
           class="fadeIn second"
           name="login"
-          placeholder="email"
+          placeholder="логин"
+          v-model="userItem.username"
         />
         <input
-          type="text"
+          type="password"
           id="password"
           class="fadeIn third"
           name="login"
           placeholder="құпиясөз"
+          v-model="userItem.password"
         />
         <input type="submit" class="fadeIn fourth" value="Кіру" />
       </form>
 
       <!-- Remind Passowrd -->
-      <div id="formFooter">
-        <a class="underlineHover" href="#">Құпиясөзіңізді ұмыттыңыз ба?</a>
+      <div class="formFooter">
+        <NuxtLink class="underlineHover" to="/auth/register">
+          Тіркелу бетіне өту
+        </NuxtLink>
+        <br />
+        <NuxtLink class="underlineHover" to="/auth/reset">
+          Құпиясөзіңізді ұмыттыңыз ба?
+        </NuxtLink>
       </div>
     </div>
   </div>
 </template>
+<script>
+import { mapActions, mapState } from "vuex";
+export default {
+  layout: 'empty',
+  data() {
+    return {
+      userItem: {
+        username: "karnurmax",
+        password: "qwe123QWE!@#",
+      },
+    };
+  },
+  methods: {
+    ...mapActions("auth", ["login"]),
+    callLogin(evt) {
+      evt.preventDefault();
+      this.login(this.userItem)
+        .then(() => {
+          this.$router.push(this.$route.query.redirectTo || "/");
+        })
+        .catch((err) => {
+          this.$bvToast.toast("Қате", {
+            title: "Тіркеле алмадыңыз",
+            solid: true,
+            variant: "danger",
+          });
+          console.error(err);
+        });
+    },
+  },
+};
+</script>
+
 <style scoped>
 html {
   background-color: #56baed;
@@ -38,7 +80,9 @@ body {
   font-family: "Poppins", sans-serif;
   height: 100vh;
 }
-
+.underlineHover {
+  cursor: pointer;
+}
 a {
   color: #92badd;
   display: inline-block;
@@ -55,9 +99,7 @@ h2 {
   margin: 40px 8px 10px 8px;
   color: #cccccc;
 }
-.underlineHover {
-  cursor: pointer;
-}
+
 /* STRUCTURE */
 
 .wrapper {
@@ -84,7 +126,7 @@ h2 {
   text-align: center;
 }
 
-#formFooter {
+.formFooter {
   background-color: #f6f6f6;
   border-top: 1px solid #dce8f1;
   padding: 25px;
@@ -108,6 +150,7 @@ h2.active {
 
 input[type="button"],
 input[type="submit"],
+button[type="submit"],
 input[type="reset"] {
   background-color: #56baed;
   border: none;
@@ -132,12 +175,14 @@ input[type="reset"] {
 
 input[type="button"]:hover,
 input[type="submit"]:hover,
+button[type="submit"]:hover,
 input[type="reset"]:hover {
   background-color: #39ace7;
 }
 
 input[type="button"]:active,
 input[type="submit"]:active,
+button[type="submit"]:active,
 input[type="reset"]:active {
   -moz-transform: scale(0.95);
   -webkit-transform: scale(0.95);
@@ -146,7 +191,9 @@ input[type="reset"]:active {
   transform: scale(0.95);
 }
 
-input[type="text"] {
+input[type="text"],
+input[type="email"],
+input[type="password"] {
   background-color: #f6f6f6;
   border: none;
   color: #0d0d0d;
@@ -167,12 +214,16 @@ input[type="text"] {
   border-radius: 5px 5px 5px 5px;
 }
 
-input[type="text"]:focus {
+input[type="text"],
+input[type="email"],
+input[type="password"]:focus {
   background-color: #fff;
   border-bottom: 2px solid #5fbae9;
 }
 
-input[type="text"]:placeholder {
+input[type="text"],
+input[type="email"],
+input[type="password"]:placeholder {
   color: #cccccc;
 }
 
